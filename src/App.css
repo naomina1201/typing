@@ -1,7 +1,14 @@
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
+.App {
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
+	margin-top: 50px;
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafb);
+input {
+	padding: 10px;
+	font-size: 16px;
+}
+
+h1 {
+	margin-bottom: 20px;
 }

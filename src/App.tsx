@@ -1,53 +1,49 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/tauri";
-import "./App.css";
+import React, { useState, useRef, useEffect } from 'react';
+import './App.css';
+
+const WORDS = [
+	'apple',
+	'banana',
+	'cherry',
+	'date',
+	'elderberry',
+	'fig',
+	'grape',
+];
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+	const [currentWord, setCurrentWord] = useState(randomWord());
+	const [inputValue, setInputValue] = useState('');
+	const [score, setScore] = useState(0);
+	const inputRef = useRef(null);
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
-  }
+	function randomWord() {
+		return WORDS[Math.floor(Math.random() * WORDS.length)];
+	}
 
-  return (
-    <div className="container">
-      <h1>Welcome to Tauri!</h1>
+	useEffect(() => {
+		inputRef.current.focus();
+	}, []);
 
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
+	const handleInputChange = (e) => {
+		setInputValue(e.target.value);
+		if (e.target.value === currentWord) {
+			setScore(score + 1);
+			setCurrentWord(randomWord());
+			setInputValue('');
+		}
+	};
 
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-
-      <p>{greetMsg}</p>
-    </div>
-  );
+	return (
+		<div className="App">
+			<h1>Typing Game</h1>
+			<p>
+				Type the word: <strong>{currentWord}</strong>
+			</p>
+			<input ref={inputRef} value={inputValue} onChange={handleInputChange} />
+			<p>Score: {score}</p>
+		</div>
+	);
 }
 
 export default App;
